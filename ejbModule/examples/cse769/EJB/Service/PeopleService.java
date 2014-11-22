@@ -1,5 +1,8 @@
 package examples.cse769.EJB.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.*;
 
 import examples.cse769.EJB.Entity.*;
@@ -41,6 +44,25 @@ public class PeopleService {
 		}else{
 			return false;
 		}
+	}
+	
+	public int[] search(String email, String password){
+		int[] res=new int[2];
+		List<People> peopleList=new ArrayList<People>();
+		Query query=null;
+		try{
+			query=em.createNativeQuery("select * from people where email='"+email+"' and password='"+password+"'", People.class);
+		}catch(Exception e){
+			res[0]=0;
+		}
+		if(query.getResultList().isEmpty()){
+			res[0]=0;
+		}else{
+			peopleList=query.getResultList();
+			res[0]=peopleList.get(0).getType();
+			res[1]=peopleList.get(0).getId();
+		}
+		return res;
 	}
 
 }

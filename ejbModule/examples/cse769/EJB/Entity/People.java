@@ -1,7 +1,5 @@
 package examples.cse769.EJB.Entity;
 
-import java.io.*;
-
 import javax.persistence.*;
 
 @Entity
@@ -9,7 +7,7 @@ import javax.persistence.*;
 public class People {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	//@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="ID")
 	private int id;
 	
