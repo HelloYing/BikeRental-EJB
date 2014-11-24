@@ -107,6 +107,18 @@ public ArrayList<BikeEntity> searchBikeByCondition(int condition)
 	return bikes;	
 }
 
+public ArrayList<BikeEntity> searchAllBike(){
+	ArrayList<BikeEntity> bikes=new ArrayList<BikeEntity>();
+	String sql="select * from bike";
+	Query query=manager.createNativeQuery(sql);
+	List<BikeEntity> list=query.getResultList();
+	for(int i=0; i<list.size(); i++){
+		BikeEntity bike=list.get(i);
+		bikes.add(bike);
+	}
+	return bikes;
+}
+
 /*public ArrayList<BikeEntity> searchBike(String name, double price)
 {
 	ArrayList<BikeEntity> bikes=new ArrayList<BikeEntity>();
