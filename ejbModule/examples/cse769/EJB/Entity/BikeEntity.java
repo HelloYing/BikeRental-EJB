@@ -17,6 +17,29 @@ public class BikeEntity {
 		this.id = annId;
 	}
 	
+	@Column(name="name")
+	private String name;
+	public String getName()
+	{
+		return this.name;
+	}
+	
+	public void setName(String n)
+	{
+		this.name=n;
+	}
+	
+	@Column(name="description")
+	private String description;
+	public String getDescription()
+	{
+		return this.description;
+	}
+	public void setDescription(String d)
+	{
+		this.description=d;
+	}
+	
 	@Column(name="priceid")
 	private int priceid;
 	
