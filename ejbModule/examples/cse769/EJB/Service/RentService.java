@@ -14,7 +14,7 @@ public boolean updateRent(int id,double latefee,double damagefee)
 	RentEntity rent=manager.find(RentEntity.class, id);
 	rent.setDamagefee(damagefee);
 	rent.setLatefee(latefee);
-	
+	int userid=rent.getUserid();
 	try{
 	manager.merge(rent);
 	manager.flush();

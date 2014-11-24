@@ -21,7 +21,9 @@ public boolean insertBike(BikeEntity b )
 	bike.setName(b.getName());
 	bike.setDescription(b.getDescription());
 	bike.setCondition(b.getCondition());
-	bike.setPriceid(b.getPriceid());
+	bike.setDailyprice(b.getDailyprice());
+	bike.setDamagefee(b.getDamagefee());
+	bike.setLatefee(b.getLatefee());
 	
 	try{
 	manager.persist(bike);
@@ -35,10 +37,10 @@ public boolean insertBike(BikeEntity b )
 	return true; //success
 }
 
-public boolean updateBikePrice(int id,int priceId)
+public boolean updateBikePrice(int id,double daily)
 {
 	BikeEntity bike=manager.find(BikeEntity.class, id);
-	bike.setPriceid(priceId);
+	bike.setDailyprice(daily);
 	
 	try{
 	manager.merge(bike);
@@ -52,7 +54,7 @@ public boolean updateBikePrice(int id,int priceId)
 	return true;
 }
 
-public boolean updateBikeConsition(int id, int condition)
+public boolean updateBikeCondition(int id, int condition)
 {
 	BikeEntity bike=manager.find(BikeEntity.class, id);
 	bike.setCondition(condition);
@@ -104,5 +106,12 @@ public ArrayList<BikeEntity> searchBikeByCondition(int condition)
 	}
 	return bikes;	
 }
+
+/*public ArrayList<BikeEntity> searchBike(String name, double price)
+{
+	ArrayList<BikeEntity> bikes=new ArrayList<BikeEntity>();
+	//if(name.isEmpty())
+}
+*/
 
 }

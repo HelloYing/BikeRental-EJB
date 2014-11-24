@@ -40,16 +40,38 @@ public class BikeEntity {
 		this.description=d;
 	}
 	
-	@Column(name="priceid")
-	private int priceid;
+	@Column(name="dailyprice")
+	private double dailyprice;
 	
-	public int getPriceid()
+	public double getDailyprice()
 	{
-		return this.priceid;
+		return this.dailyprice;
 	}
-	public void setPriceid(int price)
+	public void setDailyprice(double price)
 	{
-		this.priceid=price;
+		this.dailyprice=price;
+	}
+	
+	@Column(name="damagefee")
+	private double damagefee;
+	public double getDamagefee()
+	{
+		return this.damagefee;
+	}
+	public void setDamagefee(double d)
+	{
+		this.damagefee=d;
+	}
+	
+	@Column(name="latefee")
+	private double latefee;
+	public double getLatefee()
+	{
+		return this.latefee;
+	}
+	public void setLatefee(double l)
+	{
+		this.latefee=l;
 	}
 	
 	@Column(name="condition")
@@ -62,6 +84,7 @@ public class BikeEntity {
 	{
 		this.condition=condition;
 	}
+	
 	
 	
 }
