@@ -58,6 +58,10 @@ public class PeopleService {
 		}
 	}
 	
+	public void updatePoint()
+	{
+		
+	}
 	public int[] search(String email, String password){
 		int[] res=new int[3];
 		Query query=null;
