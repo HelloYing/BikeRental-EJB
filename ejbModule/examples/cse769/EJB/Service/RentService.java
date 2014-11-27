@@ -54,26 +54,32 @@ public boolean searchAvailableBike(int id, Date binDate, Date endDate){
 }
 
 public String insert(int peopleId, int bikeId, double price, Date binDate, Date endDate){
-	RentEntity rentEntity=new RentEntity();
-	rentEntity.setBikeid(bikeId);
-	rentEntity.setCash(0);
-	rentEntity.setPrice(price);
-	rentEntity.setDatebegin(binDate);
-	rentEntity.setDateend(endDate);
-	rentEntity.setLatefee(0);
-	rentEntity.setDamagefee(0);
-	Timestamp d = new Timestamp(System.currentTimeMillis());
-	rentEntity.setCreateTime(d);
-	String cn="U"+peopleId+"B"+bikeId+d.toString();
-	rentEntity.setConfirmnum(cn);
-	rentEntity.setUserid(peopleId);
-	rentEntity.setPoint((int) price);
-	try{
-		manager.persist(rentEntity);
-		manager.flush();
-	}catch(Exception e){
-		return "Database access failed.";
-	}
+	PeopleService peopleService=new PeopleService();
+	String cn="";
+	if(peopleService.updatePoint(peopleId, (int)price)){
+		RentEntity rentEntity=new RentEntity();
+		rentEntity.setBikeid(bikeId);
+		rentEntity.setCash(0);
+		rentEntity.setPrice(price);
+		rentEntity.setDatebegin(binDate);
+		rentEntity.setDateend(endDate);
+		rentEntity.setLatefee(0);
+		rentEntity.setDamagefee(0);
+		Timestamp d = new Timestamp(System.currentTimeMillis());
+		rentEntity.setCreateTime(d);
+		cn="U"+peopleId+"B"+bikeId+d.toString();
+		rentEntity.setConfirmnum(cn);
+		rentEntity.setUserid(peopleId);
+		rentEntity.setPoint((int) price);
+		try{
+			manager.persist(rentEntity);
+			manager.flush();
+		}catch(Exception e){
+			return "Database access failed.";
+		}
+	}else{
+		cn="Database access failed.";
+	}	
 	return cn;
 }
 

@@ -62,7 +62,7 @@ public class PeopleService {
 	{
 		People people=em.find(People.class, id);
 		int ori=people.getPoint();
-		people.setPoint(ori-point);		
+		people.setPoint(ori-point);	
 		try{
 		em.merge(people);
 		em.flush();
