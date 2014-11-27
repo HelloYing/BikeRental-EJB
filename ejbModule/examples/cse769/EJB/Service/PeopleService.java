@@ -58,10 +58,23 @@ public class PeopleService {
 		}
 	}
 	
-	public void updatePoint()
+	public boolean updatePoint(int id, int point)
 	{
-		
+		People people=em.find(People.class, id);
+		int ori=people.getPoint();
+		people.setPoint(ori-point);		
+		try{
+		em.merge(people);
+		em.flush();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
+	
 	public int[] search(String email, String password){
 		int[] res=new int[3];
 		Query query=null;
