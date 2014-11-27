@@ -36,11 +36,7 @@ public boolean updateRent(int id,double latefee,double damagefee)
 }
 
 public boolean searchAvailableBike(int id, Date binDate, Date endDate){
-
-	//String sql="select * from bike";
-	//Query query=manager.createNativeQuery(sql, BikeEntity.class);	
-	return true;
-/*	Query query=manager.createNativeQuery("select * from rent where bikeid="+id, RentEntity.class);
+	Query query=manager.createNativeQuery("select * from rent where bikeid="+id, RentEntity.class);
 		if(query==null || query.getResultList().isEmpty()){
 		return true;
 	}
@@ -50,13 +46,11 @@ public boolean searchAvailableBike(int id, Date binDate, Date endDate){
 			return false;
 		}
 	}
-	return true;*/
+	return true;
 }
 
 public String insert(int peopleId, int bikeId, double price, Date binDate, Date endDate){
-	PeopleService peopleService=new PeopleService();
 	String cn="";
-	if(peopleService.updatePoint(peopleId, (int)price)){
 		RentEntity rentEntity=new RentEntity();
 		rentEntity.setBikeid(bikeId);
 		rentEntity.setCash(0);
@@ -77,9 +71,6 @@ public String insert(int peopleId, int bikeId, double price, Date binDate, Date 
 		}catch(Exception e){
 			return "Database access failed.";
 		}
-	}else{
-		cn="Database access failed.";
-	}	
 	return cn;
 }
 
