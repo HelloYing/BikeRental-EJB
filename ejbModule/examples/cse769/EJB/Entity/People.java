@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class People {
 
 	@Id
-	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="ID")
 	private int id;
 	
@@ -39,6 +39,15 @@ public class People {
 	}
 	public void setType(int type) {
 		this.type = type;
+	}
+	
+	@Column(name="POINT")
+	private int point;	
+	public int getPoint() {
+		return point;
+	}
+	public void setPoint(int point) {
+		this.point = point;
 	}
 	
 }

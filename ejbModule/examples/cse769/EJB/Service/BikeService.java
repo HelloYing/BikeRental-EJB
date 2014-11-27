@@ -2,6 +2,7 @@ package examples.cse769.EJB.Service;
 
 import javax.ejb.Stateless;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public boolean insertBike(BikeEntity b )
 	bike.setDailyprice(b.getDailyprice());
 	bike.setDamagefee(b.getDamagefee());
 	bike.setLatefee(b.getLatefee());
+	bike.setType(b.getType());
 	
 	try{
 	manager.persist(bike);
@@ -107,10 +109,86 @@ public ArrayList<BikeEntity> searchBikeByCondition(int condition)
 	return bikes;	
 }
 
-public ArrayList<BikeEntity> searchAllBike(){
+public ArrayList<BikeEntity> searchBikeByType(String type)
+{
 	ArrayList<BikeEntity> bikes=new ArrayList<BikeEntity>();
+	String sql="select * from bike where type='"+type+"'";
+	Query query=manager.createQuery(sql);
+	List<BikeEntity> list=query.getResultList();
+	for(int i=0;i<list.size();i++)
+	{
+		BikeEntity bike=list.get(i);
+		bikes.add(bike);
+	}
+	return bikes;
+}
+
+public ArrayList<BikeEntity> searchBikeByPrice(double low,double high)
+{
+
+	ArrayList<BikeEntity> bikes=new ArrayList<BikeEntity>();
+	String sql="select * from bike where dailyprice >'"+low+"' and dailayprice < '"+high+"'";
+	Query query=manager.createQuery(sql);
+	List<BikeEntity> list=query.getResultList();
+	for(int i=0;i<list.size();i++)
+	{
+		BikeEntity bike=list.get(i);
+		bikes.add(bike);
+	}
+	return bikes;
+}
+
+public ArrayList<ArrayList<String>> searchAllBike(){
+	ArrayList<ArrayList<String>> bikes=new ArrayList<ArrayList<String>>();
 	String sql="select * from bike";
-	Query query=manager.createNativeQuery(sql);
+	Query query=manager.createNativeQuery(sql, BikeEntity.class);
+	List<BikeEntity> list=query.getResultList();
+	for(BikeEntity bike:list){
+		ArrayList<String> val=new ArrayList<String>();
+		val.add(bike.getName());
+		val.add(bike.getDescription());
+		val.add(""+bike.getCondition());
+		val.add(""+bike.getDailyprice());
+		val.add(""+bike.getLatefee());
+		val.add(""+bike.getDamagefee());
+		bikes.add(val);
+	}
+	System.out.println("all bike num is "+bikes.size());
+	return bikes;
+}
+
+
+public ArrayList<ArrayList<String>> searchAvailableBike(double price, Date binDate, Date endDate){
+	ArrayList<ArrayList<String>> bikes=new ArrayList<ArrayList<String>>();
+	String sql="select * from bike where dailyprice="+price;
+	Query query=manager.createNativeQuery(sql, BikeEntity.class);
+	List<BikeEntity> list=query.getResultList();
+	System.out.println(list.size());
+	RentService rentService=new RentService();
+	for(BikeEntity bike:list){
+		System.out.println(bike.getId());
+		System.out.println(binDate);
+		System.out.println(endDate);
+		if(rentService.searchAvailableBike(bike.getId(), binDate, endDate)){
+			ArrayList<String> val=new ArrayList<String>();
+			val.add(bike.getName());
+			val.add(bike.getDescription());
+			val.add(""+bike.getCondition());
+			val.add(""+bike.getDailyprice());
+			val.add(""+bike.getLatefee());
+			val.add(""+bike.getDamagefee());
+			val.add(""+bike.getId());
+			bikes.add(val);
+		}
+	}
+	
+	return bikes;
+}
+
+public ArrayList<BikeEntity> searchAllBikes(){
+	ArrayList<BikeEntity> bikes=new ArrayList<BikeEntity>();
+	String sql="select c from BikeEntity c";
+	Query query=manager.createQuery(sql);
 	List<BikeEntity> list=query.getResultList();
 	for(int i=0; i<list.size(); i++){
 		BikeEntity bike=list.get(i);
@@ -118,6 +196,36 @@ public ArrayList<BikeEntity> searchAllBike(){
 	}
 	return bikes;
 }
+
+/*
+public ArrayList<ArrayList<String>> searchAvailableBike(double price, Date binDate, Date endDate){
+	ArrayList<ArrayList<String>> bikes=new ArrayList<ArrayList<String>>();
+	//	String sql="select * from bike";
+	String sql="select bike.* from bike,rent where bike.dailyprice="+price+" and bike.id=rent.bikeid and (rent.datebin>"+endDate+" or rent.dateend<"+binDate+")";
+	Query query=manager.createNativeQuery(sql, BikeEntity.class);
+	List<BikeEntity> list=query.getResultList();
+	System.out.println(list.size());
+	RentService rentService=new RentService();
+	for(BikeEntity bike:list){
+		System.out.println(bike.getId());
+		System.out.println(binDate);
+		System.out.println(endDate);
+		//if(rentService.searchAvailableBike(bike.getId(), binDate, endDate)){
+			ArrayList<String> val=new ArrayList<String>();
+			val.add(bike.getName());
+			val.add(bike.getDescription());
+			val.add(""+bike.getCondition());
+			val.add(""+bike.getDailyprice());
+			val.add(""+bike.getLatefee());
+			val.add(""+bike.getDamagefee());
+			val.add(""+bike.getId());
+			bikes.add(val);
+		//}
+	}
+	
+	return bikes;
+}
+*/
 
 /*public ArrayList<BikeEntity> searchBike(String name, double price)
 {

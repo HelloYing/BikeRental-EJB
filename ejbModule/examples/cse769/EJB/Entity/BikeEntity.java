@@ -13,8 +13,19 @@ public class BikeEntity {
 	public int getId(){
 		return this.id;
 	}
-	public void setId(int annId){
-		this.id = annId;
+	public void setId(int Id){
+		this.id = Id;
+	}
+	
+	@Column(name="type")
+	private String type;
+	public String getType()
+	{
+		return this.type;
+	}
+	public void setType(String t)
+	{
+		this.type=t;
 	}
 	
 	@Column(name="name")

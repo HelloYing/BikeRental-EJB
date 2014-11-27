@@ -1,6 +1,5 @@
 package examples.cse769.EJB.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -22,6 +21,7 @@ public class PeopleService {
 		people.setEmail(email);
 		people.setPassword(password);
 		people.setType(1);
+		people.setPoint(1000);
 
 		try{
 			em.persist(people);
@@ -29,6 +29,18 @@ public class PeopleService {
 		}catch(Exception e){
 			return "Database can't access.";
 		}
+		
+		Query query=null;
+		try{
+			query=em.createNativeQuery("select * from people where email='"+email+"'", People.class);
+		}catch(Exception e){
+			return "Profile insert failed.";
+		}
+		List<People> peoples=query.getResultList();
+		People people2=peoples.get(0);
+		ProfileService profileService=new ProfileService();
+		System.out.println("people id="+people2.getId());
+		profileService.insert(people2.getId(), email);		
 		return "Register success.";
 	}
 	
@@ -47,8 +59,7 @@ public class PeopleService {
 	}
 	
 	public int[] search(String email, String password){
-		int[] res=new int[2];
-		List<People> peopleList=new ArrayList<People>();
+		int[] res=new int[3];
 		Query query=null;
 		try{
 			query=em.createNativeQuery("select * from people where email='"+email+"' and password='"+password+"'", People.class);
@@ -58,9 +69,11 @@ public class PeopleService {
 		if(query.getResultList().isEmpty()){
 			res[0]=0;
 		}else{
-			peopleList=query.getResultList();
-			res[0]=peopleList.get(0).getType();
-			res[1]=peopleList.get(0).getId();
+			List<People> peopleList=query.getResultList();
+			People people=peopleList.get(0);
+			res[0]=people.getType();
+			res[1]=people.getId();
+			res[2]=people.getPoint();
 		}
 		return res;
 	}
