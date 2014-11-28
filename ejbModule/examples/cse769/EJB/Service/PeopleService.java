@@ -29,18 +29,6 @@ public class PeopleService {
 		}catch(Exception e){
 			return "Database can't access.";
 		}
-		
-		Query query=null;
-		try{
-			query=em.createNativeQuery("select * from people where email='"+email+"'", People.class);
-		}catch(Exception e){
-			return "Profile insert failed.";
-		}
-		List<People> peoples=query.getResultList();
-		People people2=peoples.get(0);
-		ProfileService profileService=new ProfileService();
-		System.out.println("people id="+people2.getId());
-		profileService.insert(people2.getId(), email);		
 		return "Register success.";
 	}
 	
