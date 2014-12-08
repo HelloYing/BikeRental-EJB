@@ -39,6 +39,28 @@ public boolean insertBike(BikeEntity b )
 	return true; //success
 }
 
+public boolean updateBike(BikeEntity b)
+{
+	BikeEntity bike=manager.find(BikeEntity.class, b.getId());
+	bike.setName(b.getName());
+	bike.setType(b.getType());
+	bike.setDescription(b.getDescription());
+	bike.setCondition(b.getCondition());
+	bike.setDailyprice(b.getDailyprice());
+	bike.setDamagefee(b.getDamagefee());
+	bike.setLatefee(b.getLatefee());
+	
+	try{
+		manager.merge(bike);
+		manager.flush();
+	}
+	catch(Exception e)
+	{
+		e.printStackTrace();
+		return  false;
+	}
+	return true;
+}
 public boolean updateBikePrice(int id,double daily)
 {
 	BikeEntity bike=manager.find(BikeEntity.class, id);
@@ -96,7 +118,7 @@ public BikeEntity serachBikeById(int id)
 public ArrayList<BikeEntity> searchBikeByCondition(int condition)
 {
 	ArrayList<BikeEntity> bikes=new ArrayList<BikeEntity>();
-	String sql="select * from bike where condition='"+condition+"'";
+	String sql="select c from BikeEntity c where c.condition = '"+condition+"'";
 	Query query=manager.createQuery(sql);
 	List<BikeEntity> list=query.getResultList();
 	
@@ -112,7 +134,7 @@ public ArrayList<BikeEntity> searchBikeByCondition(int condition)
 public ArrayList<BikeEntity> searchBikeByType(String type)
 {
 	ArrayList<BikeEntity> bikes=new ArrayList<BikeEntity>();
-	String sql="select * from bike where type='"+type+"'";
+	String sql="select c from BikeEntity c where c.type = '"+type+"'";
 	Query query=manager.createQuery(sql);
 	List<BikeEntity> list=query.getResultList();
 	for(int i=0;i<list.size();i++)
@@ -127,7 +149,7 @@ public ArrayList<BikeEntity> searchBikeByPrice(double low,double high)
 {
 
 	ArrayList<BikeEntity> bikes=new ArrayList<BikeEntity>();
-	String sql="select * from bike where dailyprice >'"+low+"' and dailayprice < '"+high+"'";
+	String sql="select c from BikeEntity c where c.dailyprice between "+low+" and "+high;
 	Query query=manager.createQuery(sql);
 	List<BikeEntity> list=query.getResultList();
 	for(int i=0;i<list.size();i++)
@@ -179,6 +201,20 @@ public ArrayList<BikeEntity> searchAllBikes(){
 		bikes.add(bike);
 	}
 	return bikes;
+}
+
+public boolean searchAvailableBike(int id, Date binDate, Date endDate){
+	Query query=manager.createNativeQuery("select * from rent where bikeid="+id, RentEntity.class);
+		if(query==null || query.getResultList().isEmpty()){
+		return true;
+	}
+	List<RentEntity> list=query.getResultList();
+	for(RentEntity rent: list){
+		if(!(rent.getDatebegin().after(endDate) || rent.getDateend().before(binDate))){
+			return false;
+		}
+	}
+	return true;
 }
 
 }

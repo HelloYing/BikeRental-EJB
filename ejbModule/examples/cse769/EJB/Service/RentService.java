@@ -5,6 +5,8 @@ import java.sql.Timestamp;
 
 import javax.ejb.Stateless;
 import javax.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import examples.cse769.EJB.Entity.*;;
@@ -16,12 +18,14 @@ EntityManager manager;
 
 public RentService(){}
 
-public boolean updateRent(int id,double latefee,double damagefee)
+public int updateRent(int id,double latefee,double damagefee)
 {
 	RentEntity rent=manager.find(RentEntity.class, id);
 	rent.setDamagefee(damagefee);
 	rent.setLatefee(latefee);
+	
 	int userid=rent.getUserid();
+	
 	try{
 	manager.merge(rent);
 	manager.flush();
@@ -29,24 +33,57 @@ public boolean updateRent(int id,double latefee,double damagefee)
 	catch(Exception e)
 	{
 		e.printStackTrace();
-		return false;
+		return -1;
 	}
 	
-	return true;
+	return userid;
 }
 
-public boolean searchAvailableBike(int id, Date binDate, Date endDate){
-	Query query=manager.createNativeQuery("select * from rent where bikeid="+id, RentEntity.class);
-		if(query==null || query.getResultList().isEmpty()){
-		return true;
-	}
+public RentEntity searchRentById(int id)
+{
+	RentEntity rent=manager.find(RentEntity.class, id);
+	return rent;
+}
+public ArrayList<RentEntity> searchRentByBikeType(String type)
+{
+	ArrayList<RentEntity> rents=new ArrayList<RentEntity>();
+	String sql="select c from RentEntity c where c.type = '"+type+"'";
+	Query query=manager.createQuery(sql);
 	List<RentEntity> list=query.getResultList();
-	for(RentEntity rent: list){
-		if(!(rent.getDatebegin().after(endDate) || rent.getDateend().before(binDate))){
-			return false;
-		}
+	for(int i=0; i<list.size(); i++){
+		RentEntity rent=list.get(i);
+		rents.add(rent);
 	}
-	return true;
+	return rents;
+}
+
+public ArrayList<RentEntity> searchRentByDate(Date begin,Date end)
+{
+	ArrayList<RentEntity> rents=new ArrayList<RentEntity>();
+	String sql="select c from RentEntity c where c.date between "+begin+" and "+end;
+	Query query =manager.createQuery(sql);
+	List<RentEntity> list=query.getResultList();
+	for(int i=0;i<list.size();i++)
+	{
+		RentEntity rent=list.get(i);
+		rents.add(rent);
+	}
+	return rents;
+}
+
+public ArrayList<RentEntity> searchRentByUser(String email)
+{
+	ArrayList<RentEntity> rents=new ArrayList<RentEntity>();
+	String sql="select * from rent inner join people where people.id=rent.userid and people.email= '"+email+"' order by createtime desc";
+	//Query query =manager.createQuery(sql);
+	Query query=manager.createNativeQuery(sql, RentEntity.class);
+	List<RentEntity> list=query.getResultList();
+	for(int i=0;i<list.size();i++)
+	{
+		RentEntity rent=list.get(i);
+		rents.add(rent);
+	}
+	return rents;
 }
 
 public String insert(int peopleId, int bikeId, double price, Date binDate, Date endDate){

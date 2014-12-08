@@ -3,8 +3,12 @@
 	
 	<persistence-unit name="examples-769-EJB">
 	   <jta-data-source>java:jboss/datasources/ExampleDS</jta-data-source>
-	   <class>examples.cse769.EJB.Entity.HelloServiceEntity</class>
-	   	   <class>examples.cse769.EJB.Entity.JobListingEntity</class>
+	   <class>examples.cse769.EJB.Entity.BikeEntity</class>
+	   <class>examples.cse769.EJB.Entity.EventEntity</class>
+	   <class>examples.cse769.EJB.Entity.RentEntity</class>
+	   <class>examples.cse769.EJB.Entity.People</class>
+	    <class>examples.cse769.EJB.Entity.Price</class>
+	   <class>examples.cse769.EJB.Entity.Profile</class>
 	   
 	   <properties>
 	   

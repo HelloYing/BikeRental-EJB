@@ -1,5 +1,7 @@
 package examples.cse769.EJB.Entity;
 
+import java.sql.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -68,5 +70,26 @@ public class EventEntity {
 	{
 		this.address=a;
 	}
+	
+	@Column(name="date")
+	private Date date;
+	public Date getDate()
+	{
+		return this.date;
+	}
+	public void setDate(Date d)
+	{
+		this.date=d;
+	}
+	
+	@Column(name="editable")
+	public boolean isEditable() {
+		return editable;
+	}
+	public void setEditable(boolean editable) {
+		this.editable = editable;
+	}
+
+	private boolean editable;
 	
 }

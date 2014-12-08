@@ -46,6 +46,15 @@ public class PeopleService {
 		}
 	}
 	
+	public People searchUserByEmail(String email)
+	{
+		Query query=em.createNativeQuery("select * from people where email= '"+email+"'", People.class);
+		List<People> list=query.getResultList();
+		//will only get one people result for one email
+		People p=list.get(0);
+		return p;
+	}
+	
 	public boolean updatePoint(int id, int point)
 	{
 		People people=em.find(People.class, id);
