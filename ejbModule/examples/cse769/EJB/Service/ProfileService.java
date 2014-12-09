@@ -86,6 +86,7 @@ public class ProfileService {
 		profile.setFirstname("");
 		profile.setLastname("");
 		profile.setPhone("");
+		profile.setGender(1);
 		@SuppressWarnings("deprecation")
 		Date date=new Date(1985,6,20);
 		profile.setBirthday(date);

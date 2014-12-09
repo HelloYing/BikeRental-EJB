@@ -56,6 +56,15 @@ public class Profile{
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
+	
+	@Column(name="GENDER")
+	private int gender;	
+	public int getGender() {
+		return gender;
+	}
+	public void setGender(int gender) {
+		this.gender = gender;
+	}
 
 
 	@Column(name="PHONE")
@@ -84,6 +93,15 @@ public class Profile{
 	}
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	
+	@Column(name="TYPE")
+	private String type;	
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 		
 }
